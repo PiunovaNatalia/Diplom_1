@@ -1,11 +1,9 @@
 from praktikum import Burger, Bun, Ingredient
 import pytest
-import allure
 from .data import Data
 
 
 class TestBurger:
-    @allure.title('Тестирование добавления булочки')
     @pytest.mark.parametrize('buns', Data.buns_data)
     def test_burger_set_buns(self, buns):
         bun = Bun(*buns)
@@ -13,7 +11,6 @@ class TestBurger:
         burger.set_buns(bun)
         assert burger.bun.name == bun.name
 
-    @allure.title('Тестирование добавления ингредиента')
     @pytest.mark.parametrize('ingredients', Data.ingredients_data)
     def test_burger_add_ingredient(self, ingredients):
         ingredient = Ingredient(*ingredients)
@@ -21,7 +18,6 @@ class TestBurger:
         burger.add_ingredient(ingredient)
         assert len(burger.ingredients) == 1
 
-    @allure.title('Тестирование удаления ингредиента')
     @pytest.mark.parametrize('ingredients', Data.ingredients_data)
     def test_burger_remove_ingredient(self, ingredients):
         ingredient = Ingredient(*ingredients)
@@ -32,7 +28,6 @@ class TestBurger:
         burger.remove_ingredient(0)
         assert len(burger.ingredients) == 0
 
-    @allure.title('Тестирование перемещения ингредиента')
     def test_burger_move_ingredient(self):
         burger = Burger()
 
@@ -46,7 +41,6 @@ class TestBurger:
 
         assert initial_ingredients_list[0] == after_moving_ingredients_list[1]
 
-    @allure.title('Тестирование вычисления цены бургера')
     @pytest.mark.parametrize('burger_data', Data.burger_data)
     def test_burger_get_price(self, burger_data):
         bun = burger_data['bun']
@@ -63,7 +57,6 @@ class TestBurger:
 
         assert burger.get_price() == expected_price
 
-    @allure.title('Тестирование формирования чека')
     @pytest.mark.parametrize('burger_data', Data.burger_data)
     def test_burger_get_price(self, burger_data):
         bun = burger_data['bun']
