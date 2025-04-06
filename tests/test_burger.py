@@ -1,44 +1,81 @@
-from praktikum.ingredient import Ingredient
+from praktikum import Burger, Bun, Ingredient
 import pytest
 import allure
 from data import Data
 
 
-class TestIngredient:
-    @allure.title('Тестирование получения имени ингредиента')
-    @allure.description(
-        'Создается 2 объекта ингредиента, затем сраниваются имена '
-        'из параметризованных данных с именами, которые были присвоены объектам'
-    )
+class TestBurger:
+    @allure.title('Тестирование добавления булочки')
+    @pytest.mark.parametrize('buns', Data.buns_data)
+    def test_burger_set_buns(self, buns):
+        bun = Bun(*buns)
+        burger = Burger()
+        burger.set_buns(bun)
+        assert burger.bun.name == bun.name
+
+    @allure.title('Тестирование добавления ингредиента')
     @pytest.mark.parametrize('ingredients', Data.ingredients_data)
-    def test_ingredient_get_name(self, ingredients):
-        ingredient_type, name, price = ingredients
-        ingredient = Ingredient(ingredient_type, name, price)
+    def test_burger_add_ingredient(self, ingredients):
+        ingredient = Ingredient(*ingredients)
+        burger = Burger()
+        burger.add_ingredient(ingredient)
+        assert len(burger.ingredients) == 1
 
-        assert ingredient.get_name() == name
-
-    @allure.title('Тестирование получения цены ингредиента')
-    @allure.description(
-        'Создается 2 объекта ингредиента, затем сраниваются цены '
-        'из параметризованных данных с ценами, которые были присвоены объектам'
-    )
+    @allure.title('Тестирование удаления ингредиента')
     @pytest.mark.parametrize('ingredients', Data.ingredients_data)
-    def test_ingredient_get_price(self, ingredients):
-        ingredient_type, name, price = ingredients
-        ingredient = Ingredient(ingredient_type, name, price)
+    def test_burger_remove_ingredient(self, ingredients):
+        ingredient = Ingredient(*ingredients)
+        burger = Burger()
+        burger.add_ingredient(ingredient)
+        assert len(burger.ingredients) == 1
 
-        assert ingredient.get_price() == price
+        burger.remove_ingredient(0)
+        assert len(burger.ingredients) == 0
 
-    @allure.title('Тестирование получения типа ингредиента')
-    @allure.description(
-        'Создается 2 объекта ингредиента, затем сраниваются типы '
-        'из параметризованных данных с типами, которые были присвоены объектам'
-    )
-    @pytest.mark.parametrize('ingredients', Data.ingredients_data)
-    def test_ingredient_get_type(self, ingredients):
-        ingredient_type, name, price = ingredients
-        ingredient = Ingredient(ingredient_type, name, price)
+    @allure.title('Тестирование перемещения ингредиента')
+    def test_burger_move_ingredient(self):
+        burger = Burger()
 
-        assert ingredient.get_type() == ingredient_type
+        for i in Data.ingredients_data:
+            ingredient = Ingredient(*i)
+            burger.add_ingredient(ingredient)
 
+        initial_ingredients_list = burger.ingredients.copy()
+        burger.move_ingredient(0, 1)
+        after_moving_ingredients_list = burger.ingredients
 
+        assert initial_ingredients_list[0] == after_moving_ingredients_list[1]
+
+    @allure.title('Тестирование вычисления цены бургера')
+    @pytest.mark.parametrize('burger_data', Data.burger_data)
+    def test_burger_get_price(self, burger_data):
+        bun = burger_data['bun']
+        ingredients = burger_data['ingredients']
+        expected_price = burger_data['expected_price']
+
+        burger = Burger()
+        bun = Bun(*bun)
+        burger.set_buns(bun)
+
+        for ingredient in ingredients:
+            ingredient = Ingredient(*ingredient)
+            burger.add_ingredient(ingredient)
+
+        assert burger.get_price() == expected_price
+
+    @allure.title('Тестирование формирования чека')
+    @pytest.mark.parametrize('burger_data', Data.burger_data)
+    def test_burger_get_price(self, burger_data):
+        bun = burger_data['bun']
+        ingredients = burger_data['ingredients']
+        expected_receipt = burger_data['expected_receipt']
+
+        burger = Burger()
+        bun = Bun(*bun)
+        burger.set_buns(bun)
+
+        for ingredient in ingredients:
+            ingredient = Ingredient(*ingredient)
+            burger.add_ingredient(ingredient)
+
+        assert burger.get_receipt() == expected_receipt
