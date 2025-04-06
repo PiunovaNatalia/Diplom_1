@@ -1,7 +1,7 @@
 from praktikum import Ingredient
 import pytest
 import allure
-from data import Data
+from .data import Data
 
 
 class TestIngredient:

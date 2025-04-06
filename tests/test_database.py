@@ -1,7 +1,6 @@
 from praktikum import Database
-import pytest
 import allure
-from data import Data
+from .data import Data
 
 
 class TestDatabase:

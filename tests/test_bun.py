@@ -1,7 +1,7 @@
 from praktikum import Bun
 import pytest
 import allure
-from data import Data
+from .data import Data
 
 
 class TestBun:

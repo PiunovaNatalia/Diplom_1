@@ -1,3 +1,5 @@
 .idea/
 praktikum/__pycache__/
 tests/__pycache__/
+env
+.coverage
