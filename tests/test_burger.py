@@ -1,6 +1,7 @@
 from praktikum import Burger, Bun, Ingredient
 import pytest
-from .data import Data
+from data import Data
+from helpers import add_ingredients_to_burger
 
 
 class TestBurger:
@@ -9,6 +10,7 @@ class TestBurger:
         bun = Bun(*buns)
         burger = Burger()
         burger.set_buns(bun)
+
         assert burger.bun.name == bun.name
 
     @pytest.mark.parametrize('ingredients', Data.ingredients_data)
@@ -16,6 +18,7 @@ class TestBurger:
         ingredient = Ingredient(*ingredients)
         burger = Burger()
         burger.add_ingredient(ingredient)
+
         assert len(burger.ingredients) == 1
 
     @pytest.mark.parametrize('ingredients', Data.ingredients_data)
@@ -30,11 +33,7 @@ class TestBurger:
 
     def test_burger_move_ingredient(self):
         burger = Burger()
-
-        for i in Data.ingredients_data:
-            ingredient = Ingredient(*i)
-            burger.add_ingredient(ingredient)
-
+        burger = add_ingredients_to_burger(burger, Data.ingredients_data)
         initial_ingredients_list = burger.ingredients.copy()
         burger.move_ingredient(0, 1)
         after_moving_ingredients_list = burger.ingredients
@@ -46,14 +45,10 @@ class TestBurger:
         bun = burger_data['bun']
         ingredients = burger_data['ingredients']
         expected_price = burger_data['expected_price']
-
         burger = Burger()
         bun = Bun(*bun)
         burger.set_buns(bun)
-
-        for ingredient in ingredients:
-            ingredient = Ingredient(*ingredient)
-            burger.add_ingredient(ingredient)
+        burger = add_ingredients_to_burger(burger, ingredients)
 
         assert burger.get_price() == expected_price
 
@@ -62,13 +57,9 @@ class TestBurger:
         bun = burger_data['bun']
         ingredients = burger_data['ingredients']
         expected_receipt = burger_data['expected_receipt']
-
         burger = Burger()
         bun = Bun(*bun)
         burger.set_buns(bun)
-
-        for ingredient in ingredients:
-            ingredient = Ingredient(*ingredient)
-            burger.add_ingredient(ingredient)
+        burger = add_ingredients_to_burger(burger, ingredients)
 
         assert burger.get_receipt() == expected_receipt

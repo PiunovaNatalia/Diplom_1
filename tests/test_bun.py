@@ -1,6 +1,6 @@
 from praktikum import Bun
 import pytest
-from .data import Data
+from data import Data
 
 
 class TestBun:
